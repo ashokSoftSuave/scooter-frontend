@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import React from "react";
 import ArticleMeta from "./ArticleMeta";
-import EditTwo from "./EditTwo";
 import EditThree from "./EditThree";
 import EditFour from "./EditFour";
 import EditFive from "./EditFive";
 import EditSix from "./EditSix";
 import EditSeven from "./EditSeven";
+import Notes from "./Notes";
 
 const EditTask = () => {
   const location = useLocation();
@@ -97,10 +97,10 @@ const EditTask = () => {
   });
 
   return (
-    <div>
+    <div className="w-full h-full m-5 flex flex-col gap-5">
       <h1>All Edit Components</h1>
       <ArticleMeta setFormData={setFormData} formData={formData} />
-      <EditTwo />
+      <Notes setFormData={setFormData} formData={formData} />
       <EditThree />
       <EditFour />
       <EditFive />
