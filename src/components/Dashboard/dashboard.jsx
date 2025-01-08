@@ -1,10 +1,10 @@
-import Sidebar from "../SideNavBar/sidenavbar";
+import TaskList from "../TaskList/TaskList";
 
 function Dashboard() {
   return (
     <>
-     <div className="p-10">
-      <h1>My Task</h1>
+      <div className="w-full bg-gray-50">
+      <TaskList />
     </div>
     </>
   );

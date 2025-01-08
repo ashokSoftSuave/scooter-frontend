@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { ClipboardList, History, FileSpreadsheet, AlertCircle, BookOpen, Settings, Menu } from 'lucide-react';
-import Logo from '../../Images/logo.png';
 
-export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+export default function Sidebar({ isMenuOpen }) {
   const [activeItem, setActiveItem] = useState('my-task');
 
 
@@ -45,26 +43,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className={`min-h-screen bg-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}>
-      {/* Header with Logo */}
-      <div className="flex items-center justify-between p-4 border-b">
-      <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg hover:bg-gray-100"
-        >
-          <Menu className="w-6 h-6 text-gray-600" />
-        </button>
-        <div className="flex items-center mb-1">
-          {isOpen && (
-            <img
-              src={Logo}
-              alt="Scooter Logo"
-            //   className="h-8"
-            />
-          )}
-        </div>
-       
-      </div>
+    <div className={`min-h-screen bg-white shadow-lg transition-all duration-300 ${isMenuOpen ? 'w-64' : 'w-20'}`}>   
 
       {/* Navigation Items */}
       <nav className="mt-4">
@@ -78,7 +57,7 @@ export default function Sidebar() {
             <span className="inline-flex items-center justify-center">
               {item.icon}
             </span>
-            {isOpen && (
+            {isMenuOpen && (
               <span className="ml-3 text-sm font-medium">
                 {item.title}
               </span>

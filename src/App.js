@@ -1,12 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login/Login';
-import Signup from './components/sigin/Signup';
-import Dashboard from './components/Dashboard/dashboard';
-import MyTask from './components/MyTask/mytask';
-import Sidebar from './components/SideNavBar/sidenavbar';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./components/Login/Login";
+import Signup from "./components/sigin/Signup";
+import Dashboard from "./components/Dashboard/dashboard";
+import MyTask from "./components/MyTask/mytask";
+import Sidebar from "./components/SideNavBar/sidenavbar";
+import Header from "./components/Header/header";
 
 function App() {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  console.log('isMenuOpen: ', isMenuOpen);
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
@@ -14,17 +19,21 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route
-          path="/dashboard/*"
-          element={
-            <div className='flex flex-row'>
-              <Sidebar />
-              {/* This is the parent component which will hold the Outlet */}
-              <Dashboard />
-            </div>
-          }
-        >
-          <Route path="my-task" element={<MyTask />} />
-        </Route>
+            path="/dashboard/*"
+            element={
+              <div className="flex flex-col">
+                <Header isMenuOpen={isMenuOpen} setIsMenuOpen={
+                  () => setIsMenuOpen(!isMenuOpen)
+                }/>
+                <div className="flex flex-row w-full">
+                  <Sidebar isMenuOpen={isMenuOpen} />
+                  <Dashboard />
+                </div>
+              </div>
+            }
+          >
+            <Route path="my-task" element={<MyTask />} />
+          </Route>
         </Routes>
       </div>
     </Router>
@@ -32,4 +41,3 @@ function App() {
 }
 
 export default App;
-
