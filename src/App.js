@@ -16,7 +16,7 @@ function App() {
           <Route
           path="/dashboard/*"
           element={
-            <div>
+            <div className='flex flex-row'>
               <Sidebar />
               {/* This is the parent component which will hold the Outlet */}
               <Dashboard />
