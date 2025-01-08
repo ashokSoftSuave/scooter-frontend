@@ -4,6 +4,7 @@ import Login from './components/Login/Login';
 import Signup from './components/sigin/Signup';
 import Dashboard from './components/Dashboard/dashboard';
 import MyTask from './components/MyTask/mytask';
+import Sidebar from './components/SideNavBar/sidenavbar';
 
 function App() {
   return (
@@ -12,9 +13,18 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard/*" element={<Dashboard />}>
-            <Route path="my-task" element={<MyTask />} />
-          </Route>
+          <Route
+          path="/dashboard/*"
+          element={
+            <div>
+              <Sidebar />
+              {/* This is the parent component which will hold the Outlet */}
+              <Dashboard />
+            </div>
+          }
+        >
+          <Route path="my-task" element={<MyTask />} />
+        </Route>
         </Routes>
       </div>
     </Router>
