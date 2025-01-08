@@ -15,18 +15,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route
-          path="/dashboard/*"
-          element={
-            <div className='flex flex-row'>
-              <Sidebar />
-              {/* This is the parent component which will hold the Outlet */}
-              <EditTask />
-              {/* <Dashboard /> */}
-            </div>
-          }
-        >
-          <Route path="my-task" element={<MyTask />} />
-        </Route>
+            path="/dashboard/*"
+            element={
+              <div className='flex flex-row'>
+                <Sidebar />
+                {/* This is the parent component which will hold the Outlet */}
+                <EditTask />
+                {/* <Dashboard /> */}
+              </div>
+            }
+          >
+            <Route path="my-task" element={<MyTask />} />
+          </Route>
         </Routes>
       </div>
     </Router>
