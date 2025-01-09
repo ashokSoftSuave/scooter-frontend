@@ -1,108 +1,96 @@
-import React from "react";
-import Input from "../Input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "../Select"; // Import the Select component
+import React from 'react';
+import { format } from 'date-fns';
 
-const ArticleMeta = ({ formData, setFormData }) => {
-  // Handler for input changes
-  const handleInputChange = (key, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      article_meta: {
-        ...prev.article_meta,
-        [key]: value,
-      },
+const ArticleMeta = ({ data, onChange }) => {
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+    if (type === 'date') {
+      onChange(name, value ? new Date(value).toISOString() : null);
+    } else {
+      onChange(name, value);
+    }
+  };
+
+  const formatDate = (date) => {
+    return date ? format(new Date(date), 'yyyy-MM-dd') : '';
+  };
+
+  const groupFields = (data) => {
+    const groups = {
+      identifiers: ['pts_id', 'journal', 'pts', 'pit', 'dochead', 'em', 'doi', 'pii', 'url'],
+      publication: ['volume', 'issue', 'vol_iss', 'handling_editor', 'production_handler'],
+      authors: ['first_author', 'corr_author', 'corr_author_email'],
+      dates: ['speed_target', 'on_date', 'embargo_exp', 'article_s300_date', 'item_holdout', 'item_finalizing'],
+      misc: ['points', 'pts_remarks', 'production_notes', 'embargo_stg', 'item_group', 'title', 'pts_refers_to'],
+    };
+
+    return Object.entries(groups).map(([groupKey, fields]) => ({
+      groupKey,
+      fields: fields.map(field => ({
+        key: field,
+        value: data[field]
+      })).filter(({ value }) => value !== undefined)
     }));
   };
 
+  const groupedFields = groupFields(data);
+
   return (
-    <div className="w-full">
-      <h2 className="text-lg font-semibold mb-4">Article Meta</h2>
-      <div className="grid grid-cols-3 gap-6">
-        {/* Journal */}
-        <div className="flex flex-col">
-          <label htmlFor="journal" className="text-sm font-medium mb-1">
-            Journal
-          </label>
-          <Input
-            id="journal"
-            value={formData.article_meta.journal}
-            onChange={(e) => handleInputChange("journal", e.target.value)}
+    <div className="space-y-8">
+      <h2 className="text-xl font-semibold mb-6">Article Metadata</h2>
+      
+      {groupedFields.map(({ groupKey, fields }) => (
+        <div key={groupKey} className="space-y-4">
+          <h3 className="text-lg font-medium text-gray-900">{groupKey.charAt(0).toUpperCase() + groupKey.slice(1)}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {fields.map(({ key, value }) => (
+              <div key={key} className="space-y-2">
+                <label htmlFor={key} className="block text-sm font-medium text-gray-700">
+                  {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </label>
+                {key === 'points' || key === 'pts_remarks' || key === 'production_notes' ? (
+                  <textarea
+                    id={key}
+                    name={key}
+                    value={value || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  />
+                ) : (
+                  <input
+                    type={key.includes('date') || key.includes('exp') ? 'date' : 'text'}
+                    id={key}
+                    name={key}
+                    value={key.includes('date') || key.includes('exp') ? formatDate(value) : value}
+                    onChange={handleChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {/* Timestamps Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Created At</label>
+          <input
+            type="text"
+            value={formatDate(data.createdAt)}
+            readOnly
+            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
           />
         </div>
-
-        {/* PTS */}
-        <div className="flex flex-col">
-          <label htmlFor="pts" className="text-sm font-medium mb-1">
-            PTS
-          </label>
-          <Input
-            id="pts"
-            value={formData.article_meta.pts}
-            onChange={(e) => handleInputChange("pts", e.target.value)}
-          />
-        </div>
-
-        {/* PIT */}
-        <div className="flex flex-col">
-          <label htmlFor="pit" className="text-sm font-medium mb-1">
-            PIT
-          </label>
-          <Input
-            id="pit"
-            value={formData.article_meta.pit}
-            onChange={(e) => handleInputChange("pit", e.target.value)}
-          />
-        </div>
-
-        {/* Dochead */}
-        <div className="flex flex-col">
-          <label htmlFor="dochead" className="text-sm font-medium mb-1">
-            Dochead
-          </label>
-          <Input
-            id="dochead"
-            value={formData.article_meta.dochead}
-            onChange={(e) => handleInputChange("dochead", e.target.value)}
-          />
-        </div>
-
-        {/* Production Handler */}
-        <div className="flex flex-col">
-          <label
-            htmlFor="production_handler"
-            className="text-sm font-medium mb-1"
-          >
-            Production Handler
-          </label>
-          <Select
-            value={formData.article_meta.production_handler}
-            onValueChange={(value) => handleInputChange("production_handler", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a handler" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectItem value="John Doe">John Doe</SelectItem>
-              <SelectItem value="Jane Smith">Jane Smith</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Points */}
-        <div className="flex flex-col">
-          <label htmlFor="points" className="text-sm font-medium mb-1">
-            Points
-          </label>
-          <Input
-            id="points"
-            value={formData.article_meta.points}
-            onChange={(e) => handleInputChange("points", e.target.value)}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Updated At</label>
+          <input
+            type="text"
+            value={formatDate(data.updatedAt)}
+            readOnly
+            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
           />
         </div>
       </div>
@@ -111,3 +99,4 @@ const ArticleMeta = ({ formData, setFormData }) => {
 };
 
 export default ArticleMeta;
+

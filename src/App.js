@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
-import Dashboard from "./components/Dashboard/dashboard";
 import Signup from "./components/sigin/Signup.jsx";
-import Edit from "./components/Edit/Edit.jsx";
 import Layout from "./components/Layout/layout.jsx";
+import EditTask from "./components/EditTask/EditTask.jsx";
+import TaskList from "./components/TaskList/TaskList.jsx";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -19,8 +19,8 @@ function App() {
             <Layout isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           }
         >
-          <Route index element={<Dashboard />} />
-          <Route path="edit/:ptsId" element={<Edit />} />
+          <Route index element={<TaskList />} />
+          <Route path="edit/:ptsId" element={<EditTask />} />
         </Route>
       </Routes>
     </BrowserRouter>

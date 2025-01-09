@@ -12,7 +12,7 @@ function Layout({ isMenuOpen, setIsMenuOpen }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="  bg-gray-100">
       <div className="flex flex-col">
         <Header
           isMenuOpen={isMenuOpen}
