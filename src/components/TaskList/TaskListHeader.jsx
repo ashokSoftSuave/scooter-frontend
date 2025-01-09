@@ -7,7 +7,6 @@ function TaskListHeader() {
         <h1 className="text-2xl font-bold">My Task</h1>
         <div className="flex gap-4 mt-2">
           <span className="text-sm">Article (230)</span>
-          <span className="text-sm">Issue (10)</span>
         </div>
       </div>
       <div className="text-sm text-gray-500 mt-2 md:mt-0">

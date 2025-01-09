@@ -10,7 +10,11 @@ import Header from "./components/Header/header";
 function App() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(true);
-  console.log('isMenuOpen: ', isMenuOpen);
+
+  if(!localStorage.getItem('token')) {
+    window.location.location = '/login';
+  }
+
 
   return (
     <Router>

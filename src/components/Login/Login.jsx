@@ -1,31 +1,40 @@
-import React, { useState, useTransition, useId } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useState, useTransition, useId } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPending, startTransition] = useTransition();
   const navigate = useNavigate();
   const emailId = useId();
   const passwordId = useId();
 
-  const handleSubmit = () => {
-    startTransition(() => {
-      // Here you would typically handle the login logic
-      console.log('Login attempt with:', { email, password });
-      // For demo purposes, we'll just redirect to the dashboard
-      navigate('/dashboard');
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await axios
+      .post("http://localhost:3030/user/login", { email, password })
+      .then((response) => {
+        localStorage.setItem("token", response.data.token);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log("error",error);
+      });
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg">
-        <h3 className="text-2xl font-bold text-center">Login to your account</h3>
+        <h3 className="text-2xl font-bold text-center">
+          Login to your account
+        </h3>
         <form onSubmit={handleSubmit}>
           <div className="mt-4">
             <div>
-              <label className="block" htmlFor={emailId}>Email</label>
+              <label className="block" htmlFor={emailId}>
+                Email
+              </label>
               <input
                 type="email"
                 placeholder="Email"
@@ -37,7 +46,9 @@ function Login() {
               />
             </div>
             <div className="mt-4">
-              <label className="block" htmlFor={passwordId}>Password</label>
+              <label className="block" htmlFor={passwordId}>
+                Password
+              </label>
               <input
                 type="password"
                 placeholder="Password"
@@ -54,9 +65,14 @@ function Login() {
                 type="submit"
                 disabled={isPending}
               >
-                {isPending ? 'Logging in...' : 'Login'}
+                {isPending ? "Logging in..." : "Login"}
               </button>
-              <Link to="/signup" className="text-sm text-blue-600 hover:underline">New user? Sign up</Link>
+              <Link
+                to="/signup"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                New user? Sign up
+              </Link>
             </div>
           </div>
         </form>
@@ -66,4 +82,3 @@ function Login() {
 }
 
 export default Login;
-
