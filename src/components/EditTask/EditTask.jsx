@@ -1,13 +1,12 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import { useLocation } from "react-router-dom";
-import React from "react";
 import ArticleMeta from "./ArticleMeta";
-import EditThree from "./EditThree";
-import EditFour from "./EditFour";
 import EditFive from "./EditFive";
 import EditSix from "./EditSix";
 import EditSeven from "./EditSeven";
 import Notes from "./Notes";
+import ScheduleInfo from "./ScheduleInfo";
+import ArticleInfo from "./ArticleInfo";
 
 const EditTask = () => {
   const location = useLocation();
@@ -25,13 +24,13 @@ const EditTask = () => {
       production_notes: "Awaiting final proofs.",
     },
     schedule_info: {
-      speed_target: "2 weeks",
+      speed_target: "2025-01-15",
       on_date: "2025-02-15",
       embargo_exp: "2025-03-01",
       embargo_stg: "Stage 2",
       article_s300_date: "2025-02-20",
-      item_holdout: "None",
-      item_finalizing: "In Progress",
+      item_holdout: "2025-02-25",
+      item_finalizing: "2025-03-01",
     },
     article_info: {
       item_group: "Group A",
@@ -101,8 +100,8 @@ const EditTask = () => {
       <h1>All Edit Components</h1>
       <ArticleMeta setFormData={setFormData} formData={formData} />
       <Notes setFormData={setFormData} formData={formData} />
-      <EditThree />
-      <EditFour />
+      <ScheduleInfo setFormData={setFormData} formData={formData}/>
+      <ArticleInfo setFormData={setFormData} formData={formData}/>
       <EditFive />
       <EditSix />
       <EditSeven />
