@@ -4,6 +4,9 @@ import { Menu } from "lucide-react";
 
 function Header({ isMenuOpen, setIsMenuOpen }) {
 
+  const user = localStorage.getItem("user")
+  const email = localStorage.getItem("email")
+
   return (
     <header className="border-b bg-white">
       <div className="container ml-1 px-4 pl-0">
@@ -31,11 +34,13 @@ function Header({ isMenuOpen, setIsMenuOpen }) {
           <div className="flex items-center">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">JD</span>
+                <span className="text-white text-sm font-medium">
+                  {user?.charAt(0).toUpperCase() || "U"}
+                </span>
               </div>
               <div className="hidden md:block">
-                <div className="text-sm font-medium">John Doe</div>
-                <div className="text-xs text-gray-500">johndoe@email.com</div>
+                <div className="text-sm font-medium">{user || "Test"}</div>
+                <div className="text-xs text-gray-500">{email || "Test@gmail.com"}</div>
               </div>
             </div>
           </div>

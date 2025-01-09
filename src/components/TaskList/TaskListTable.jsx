@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AlertTriangle, Edit } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const mockData = [
   {
@@ -39,10 +40,10 @@ const mockData = [
 ];
 
 function TaskListTable({ searchQuery, filters }) {
-
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -58,8 +59,8 @@ function TaskListTable({ searchQuery, filters }) {
           setData(response.data);
         })
         .catch((error) => {
-          if(error.response.status === 400) {
-            window.location.href = '/login';
+          if (error.response.status === 400) {
+            window.location.href = "/login";
           }
           setError(error.response.data || { msg: "Something went wrong!" });
         })
@@ -69,6 +70,11 @@ function TaskListTable({ searchQuery, filters }) {
     };
     fetchArticles();
   }, []);
+
+  const handleRedirectPath = (ptsId) => {
+    const navigationData = data.filter((item) => item.pts_id === ptsId);
+    navigate(`/edit/${ptsId}`, { state: { data: navigationData } });
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -105,8 +111,7 @@ function TaskListTable({ searchQuery, filters }) {
           </tr>
         </thead>
         <tbody>
-          {
-            data.length > 0 ?
+          {data.length > 0 ? (
             data?.map((row, index) => (
               <tr key={index} className="border-t hover:bg-gray-50">
                 <td className="px-4 py-2 flex items-center">
@@ -120,22 +125,31 @@ function TaskListTable({ searchQuery, filters }) {
                 <td className="px-4 py-2">{row.corr_author}</td>
                 <td className="px-4 py-2">{row.pit}</td>
                 <td className="px-4 py-2">{row.title}</td>
-                <td className="px-4 py-2">{row.milestone?.copy_edit_task_complete}</td>
-                <td className="px-4 py-2">{row.event.sd_published_on_the_web_s200}</td>
                 <td className="px-4 py-2">
-                  <button className="text-blue-600 hover:text-blue-800">
+                  {row.milestone?.copy_edit_task_complete}
+                </td>
+                <td className="px-4 py-2">
+                  {row.event.sd_published_on_the_web_s200}
+                </td>
+                <td className="px-4 py-2">
+                  <button
+                    className="text-blue-600 hover:text-blue-800"
+                    onClick={() => {
+                      handleRedirectPath(row.pts_id);
+                    }}
+                  >
                     <Edit className="h-4 w-4" />
                   </button>
                 </td>
               </tr>
-            )) : (
-              <tr>
-                <td colSpan="8" className="text-center py-4">
-                  No articles found!
-                </td>
-              </tr>
-            )
-          }
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8" className="text-center py-4">
+                No articles found!
+              </td>
+            </tr>
+          )}
           {loading && (
             <tr>
               <td colSpan="8" className="text-center py-4">

@@ -16,6 +16,8 @@ function Login() {
       .post(`${process.env.REACT_APP_BASE_URL}/user/login`, { email, password })
       .then((response) => {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", response.data.username);
+        localStorage.setItem("email", response.data.email);
         navigate("/dashboard");
       })
       .catch((error) => {
