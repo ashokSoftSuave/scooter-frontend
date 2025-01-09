@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState, useTransition, useId } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -11,13 +12,17 @@ function Signup() {
   const emailId = useId();
   const passwordId = useId();
 
-  const handleSubmit = () => {
-    startTransition(() => {
-      // Here you would typically handle the signup logic
-      console.log('Signup attempt with:', { name, email, password });
-      // For demo purposes, we'll just redirect to the dashboard
-      navigate('/dashboard');
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, { username:name, email, password })
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        navigate('/login');
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+   
   };
 
   return (

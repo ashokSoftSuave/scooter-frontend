@@ -43,7 +43,7 @@ export default function Sidebar({ isMenuOpen }) {
   ];
 
   return (
-    <div className={`min-h-screen bg-white shadow-lg transition-all duration-300 ${isMenuOpen ? 'w-64' : 'w-20'}`}>   
+    <div className={`h-[91.5vh] bg-white shadow-lg transition-all duration-300 ${isMenuOpen ? 'w-64' : 'w-20'}`}>   
 
       {/* Navigation Items */}
       <nav className="mt-4">

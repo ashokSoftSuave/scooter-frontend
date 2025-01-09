@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertTriangle, Edit } from "lucide-react";
 import axios from "axios";
 
@@ -39,30 +39,36 @@ const mockData = [
 ];
 
 function TaskListTable({ searchQuery, filters }) {
-  const filteredData = mockData.filter((row) => {
-    const searchString = searchQuery.toLowerCase();
-    return Object.values(row).some((value) =>
-      value.toString().toLowerCase().includes(searchString)
-    );
-  });
 
-  useEffect( async () => {
-   await axios
-      .get("http://localhost:3030/article/getarticle")
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      await axios
+        .get(`${process.env.REACT_APP_BASE_URL}/article/getarticle`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setData(response.data);
+        })
+        .catch((error) => {
+          if(error.response.status === 400) {
+            window.location.href = '/login';
+          }
+          setError(error.response.data || { msg: "Something went wrong!" });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+    fetchArticles();
   }, []);
-
-  const sortedData = filteredData.sort((a, b) => {
-    if (filters.sortBy === "dueDate") {
-      return new Date(a.s200) - new Date(b.s200);
-    }
-    return a[filters.sortBy].localeCompare(b[filters.sortBy]);
-  });
 
   return (
     <div className="overflow-x-auto">
@@ -99,28 +105,51 @@ function TaskListTable({ searchQuery, filters }) {
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((row, index) => (
-            <tr key={index} className="border-t hover:bg-gray-50">
-              <td className="px-4 py-2 flex items-center">
-                {row.hasWarning && (
-                  <AlertTriangle className="h-4 w-4 text-amber-500 mr-2" />
-                )}
-                {row.ptsId}
-              </td>
-              <td className="px-4 py-2">{row.em}</td>
-              <td className="px-4 py-2">{row.firstAuthor}</td>
-              <td className="px-4 py-2">{row.correspondingAuthor}</td>
-              <td className="px-4 py-2">{row.pit}</td>
-              <td className="px-4 py-2">{row.articleType}</td>
-              <td className="px-4 py-2">{row.copyediting}</td>
-              <td className="px-4 py-2">{row.s200}</td>
-              <td className="px-4 py-2">
-                <button className="text-blue-600 hover:text-blue-800">
-                  <Edit className="h-4 w-4" />
-                </button>
+          {
+            data.length > 0 ?
+            data?.map((row, index) => (
+              <tr key={index} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-2 flex items-center">
+                  {row.hasWarning && (
+                    <AlertTriangle className="h-4 w-4 text-amber-500 mr-2" />
+                  )}
+                  {row.pts_id}
+                </td>
+                <td className="px-4 py-2">{row.em}</td>
+                <td className="px-4 py-2">{row.first_author}</td>
+                <td className="px-4 py-2">{row.corr_author}</td>
+                <td className="px-4 py-2">{row.pit}</td>
+                <td className="px-4 py-2">{row.title}</td>
+                <td className="px-4 py-2">{row.milestone?.copy_edit_task_complete}</td>
+                <td className="px-4 py-2">{row.event.sd_published_on_the_web_s200}</td>
+                <td className="px-4 py-2">
+                  <button className="text-blue-600 hover:text-blue-800">
+                    <Edit className="h-4 w-4" />
+                  </button>
+                </td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan="8" className="text-center py-4">
+                  No articles found!
+                </td>
+              </tr>
+            )
+          }
+          {loading && (
+            <tr>
+              <td colSpan="8" className="text-center py-4">
+                Loading...
               </td>
             </tr>
-          ))}
+          )}
+          {error && (
+            <tr>
+              <td colSpan="8" className="text-center py-4">
+                Error: {error.msg}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

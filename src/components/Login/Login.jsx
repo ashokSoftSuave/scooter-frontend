@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://localhost:3030/user/login", { email, password })
+      .post(`${process.env.REACT_APP_BASE_URL}/user/login`, { email, password })
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         navigate("/dashboard");
