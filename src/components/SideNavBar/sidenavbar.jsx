@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { ClipboardList, History, FileSpreadsheet, AlertCircle, BookOpen, Settings, Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar({ isMenuOpen }) {
   const [activeItem, setActiveItem] = useState('my-task');
 
+  const navigate = useNavigate();
+
 
   const handleClickNavigation = (path) => {
+    navigate("/");
     setActiveItem(path);
   }
 

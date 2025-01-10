@@ -57,6 +57,7 @@ function TaskListTable({ searchQuery, filters }) {
         })
         .then((response) => {
           setData(response.data);
+          localStorage.setItem("dataLength", response.data.length);
         })
         .catch((error) => {
           if (error?.response?.status === 400) {
