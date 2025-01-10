@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { Input } from '../Input';
 
 const Event = ({ data, onChange }) => {
   const handleChange = (e) => {
@@ -41,17 +42,16 @@ const Event = ({ data, onChange }) => {
   return (
     <div className="space-y-8">
       <h2 className="text-xl font-semibold mb-6">Event Details</h2>
-      
+
       {/* ID and Status Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">ID</label>
-          <input
+          <Input
             type="text"
             name="pts_id"
             value={data.pts_id || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
         </div>
         <div className="space-y-2">
@@ -77,13 +77,12 @@ const Event = ({ data, onChange }) => {
               <label htmlFor={key} className="block text-sm font-medium text-gray-700">
                 {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </label>
-              <input
+              <Input
                 type={key.includes('date') || key.includes('At') ? 'date' : 'text'}
                 id={key}
                 name={key}
                 value={key.includes('date') || key.includes('At') ? formatDate(value) : value}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               />
             </div>
           ))}
@@ -93,12 +92,11 @@ const Event = ({ data, onChange }) => {
       {/* Completion Details */}
       <div className="mt-6">
         <label className="block text-sm font-medium text-gray-700">Completion Details</label>
-        <input
+        <Input
           type="text"
           name="on_completion"
           value={data.on_completion || ''}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         />
       </div>
     </div>

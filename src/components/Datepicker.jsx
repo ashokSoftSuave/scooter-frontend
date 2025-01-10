@@ -12,7 +12,7 @@ import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css";
 
 
-export function DatePickerDemo() {
+export function DatePicker() {
   const [date, setDate] = useState()
 
   return (
@@ -40,4 +40,4 @@ export function DatePickerDemo() {
     </Popover>
   )
 }
-export default DatePickerDemo;
+export default DatePicker;

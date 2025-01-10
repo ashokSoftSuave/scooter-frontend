@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { Input } from "../Input"
 
 const ArticleMeta = ({ data, onChange }) => {
   const handleChange = (e) => {
@@ -35,6 +36,34 @@ const ArticleMeta = ({ data, onChange }) => {
 
   const groupedFields = groupFields(data);
 
+  const renderInput = (key, value) => {
+    const inputProps = {
+      id: key,
+      name: key,
+      value: key.includes('date') || key.includes('exp') ? formatDate(value) : (value || ''),
+      onChange: handleChange,
+    };
+
+    if (key.includes('date') || key.includes('exp')) {
+      inputProps.type = 'date';
+    }
+
+    return <Input {...inputProps} />;
+  };
+
+  const renderTextarea = (key, value) => {
+    return (
+      <textarea
+        id={key}
+        name={key}
+        value={value || ''}
+        onChange={handleChange}
+        rows={3}
+        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+      />
+    );
+  };
+
   return (
     <div className="space-y-8">
       <h2 className="text-xl font-semibold mb-6">Article Metadata</h2>
@@ -48,25 +77,10 @@ const ArticleMeta = ({ data, onChange }) => {
                 <label htmlFor={key} className="block text-sm font-medium text-gray-700">
                   {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </label>
-                {key === 'points' || key === 'pts_remarks' || key === 'production_notes' ? (
-                  <textarea
-                    id={key}
-                    name={key}
-                    value={value || ''}
-                    onChange={handleChange}
-                    rows={3}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                ) : (
-                  <input
-                    type={key.includes('date') || key.includes('exp') ? 'date' : 'text'}
-                    id={key}
-                    name={key}
-                    value={key.includes('date') || key.includes('exp') ? formatDate(value) : value}
-                    onChange={handleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                  />
-                )}
+                {key === 'points' || key === 'pts_remarks' || key === 'production_notes'
+                  ? renderTextarea(key, value)
+                  : renderInput(key, value)
+                }
               </div>
             ))}
           </div>
@@ -77,21 +91,11 @@ const ArticleMeta = ({ data, onChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Created At</label>
-          <input
-            type="text"
-            value={formatDate(data.createdAt)}
-            readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
-          />
+          {renderInput('createdAt', data.createdAt)}
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Updated At</label>
-          <input
-            type="text"
-            value={formatDate(data.updatedAt)}
-            readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
-          />
+          {renderInput('updatedAt', data.updatedAt)}
         </div>
       </div>
     </div>

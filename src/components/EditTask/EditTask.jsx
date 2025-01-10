@@ -32,8 +32,6 @@ function EditTask() {
   }
 
   const handleSubmit = async () => {
-    // console.log(process.env.REACT_APP_BASE_URL)
-    // axikos put api with the data of formData
     await axios
       .put(
         `${process.env.REACT_APP_BASE_URL}/article/updatearticle`,
@@ -45,7 +43,6 @@ function EditTask() {
         }
       )
       .then((res) => {
-        console.log(res);
         navigate("/");
       })
       .catch((error) => {
@@ -84,12 +81,7 @@ function EditTask() {
           <div className="border-t border-gray-200 pt-6">
             <ArticleMeta
               data={article_meta}
-              onChange={(field, value) =>
-                handleFormDataChange(0, "article_meta", {
-                  ...article_meta,
-                  [field]: value,
-                })
-              }
+              onChange={(field, value) => handleFormDataChange(0, field, value)}
             />
           </div>
           <div className="mt-6 flex justify-end space-x-3">

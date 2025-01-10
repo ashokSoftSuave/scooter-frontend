@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { Input } from '../Input';
 
 const Milestone = ({ data, onChange }) => {
   const handleChange = (e) => {
@@ -43,17 +44,17 @@ const Milestone = ({ data, onChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">PTS ID</label>
-          <input
+          <Input
             type="text"
             name="pts_id"
             value={data.pts_id || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            placeholder="PTS12345"
           />
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Revision Status</label>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-start space-x-2">
             <input
               type="checkbox"
               name="revised_proof_requested"
@@ -74,13 +75,12 @@ const Milestone = ({ data, onChange }) => {
               <label htmlFor={key} className="block text-sm font-medium text-gray-700">
                 {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </label>
-              <input
+              <Input
                 type={key.includes('date') || key.includes('At') ? 'date' : 'text'}
                 id={key}
                 name={key}
                 value={key.includes('date') || key.includes('At') ? formatDate(value) : value}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               />
             </div>
           ))}
@@ -91,20 +91,20 @@ const Milestone = ({ data, onChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Created At</label>
-          <input
-            type="text"
+          <Input
+            type="date"
             value={formatDate(data.createdAt)}
             readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
+            className="bg-gray-50"
           />
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">Updated At</label>
-          <input
-            type="text"
+          <Input
+            type="date"
             value={formatDate(data.updatedAt)}
             readOnly
-            className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
+            className="bg-gray-50"
           />
         </div>
       </div>

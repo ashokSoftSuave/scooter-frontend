@@ -59,7 +59,7 @@ function TaskListTable({ searchQuery, filters }) {
           setData(response.data);
         })
         .catch((error) => {
-          if (error.response.status === 400) {
+          if (error?.response?.status === 400) {
             window.location.href = "/login";
           }
           setError(error.response.data || { msg: "Something went wrong!" });
