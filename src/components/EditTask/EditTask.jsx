@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import Event from './event';
-import Milestone from './milestone';
-import ArticleMeta from './ArticleMeta';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Event from "./event";
+import Milestone from "./milestone";
+import ArticleMeta from "./ArticleMeta";
+import axios from "axios";
 
 function EditTask() {
   const location = useLocation();
   const [formData, setFormData] = useState([]);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const navigationData = location.state?.data;
 
@@ -17,7 +20,7 @@ function EditTask() {
   }, [navigationData]);
 
   const handleFormDataChange = (index, field, value) => {
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const newData = [...prevData];
       newData[index] = { ...newData[index], [field]: value };
       return newData;
@@ -28,6 +31,30 @@ function EditTask() {
     return <div>Loading...</div>;
   }
 
+  const handleSubmit = async () => {
+    // console.log(process.env.REACT_APP_BASE_URL)
+    // axikos put api with the data of formData
+    await axios
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/article/updatearticle`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+  const handleCancel = () => {};
+
   const { event, milestone, miscellaneous_info, ...article_meta } = formData[0];
 
   return (
@@ -36,33 +63,51 @@ function EditTask() {
         <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Task</h1>
           <div className="space-y-6">
-            <Event 
-              data={event} 
-              onChange={(field, value) => handleFormDataChange(0, 'event', { ...event, [field]: value })} 
+            <Event
+              data={event}
+              onChange={(field, value) =>
+                handleFormDataChange(0, "event", { ...event, [field]: value })
+              }
             />
           </div>
           <div className="border-t border-gray-200 pt-6">
-              <Milestone
-                data={milestone} 
-                onChange={(field, value) => handleFormDataChange(0, 'milestone', { ...milestone, [field]: value })} 
-              />
-            </div>
-            <div className="border-t border-gray-200 pt-6">
-              <ArticleMeta
-                data={article_meta} 
-                onChange={(field, value) => handleFormDataChange(0, 'article_meta', { ...article_meta, [field]: value })} 
-              />
-            </div>
+            <Milestone
+              data={milestone}
+              onChange={(field, value) =>
+                handleFormDataChange(0, "milestone", {
+                  ...milestone,
+                  [field]: value,
+                })
+              }
+            />
+          </div>
+          <div className="border-t border-gray-200 pt-6">
+            <ArticleMeta
+              data={article_meta}
+              onChange={(field, value) =>
+                handleFormDataChange(0, "article_meta", {
+                  ...article_meta,
+                  [field]: value,
+                })
+              }
+            />
+          </div>
           <div className="mt-6 flex justify-end space-x-3">
             <button
               type="button"
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              onClick={() => {
+                handleCancel();
+              }}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+              onClick={() => {
+                handleSubmit();
+              }}
             >
               Save Changes
             </button>
@@ -74,4 +119,3 @@ function EditTask() {
 }
 
 export default EditTask;
-

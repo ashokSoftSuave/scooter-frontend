@@ -18,10 +18,10 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", response.data.username);
         localStorage.setItem("email", response.data.email);
-        navigate("/dashboard");
+        navigate("/");
       })
       .catch((error) => {
-        console.log("error",error);
+        console.log("error", error);
       });
   };
 

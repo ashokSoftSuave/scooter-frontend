@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function TaskListHeader() {
   return (
@@ -10,11 +10,10 @@ function TaskListHeader() {
         </div>
       </div>
       <div className="text-sm text-gray-500 mt-2 md:mt-0">
-        Last Sync: MM/DD/YYYY 00:00:00
+        Last Sync: {new Date().toLocaleString()}
       </div>
     </div>
   );
 }
 
 export default TaskListHeader;
-
