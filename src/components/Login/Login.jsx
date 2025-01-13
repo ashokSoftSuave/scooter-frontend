@@ -9,6 +9,7 @@ function Login() {
   const navigate = useNavigate();
   const emailId = useId();
   const passwordId = useId();
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ function Login() {
       })
       .catch((error) => {
         console.log("error", error);
+        setError("Invalid email or password");
       });
   };
 
@@ -61,6 +63,7 @@ function Login() {
                 required
               />
             </div>
+            {error && <p className="mt-4 text-red-600">{error}</p>}
             <div className="flex items-baseline justify-between">
               <button
                 className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900"
