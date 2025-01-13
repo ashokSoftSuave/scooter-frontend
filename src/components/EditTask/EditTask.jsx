@@ -10,6 +10,7 @@ function EditTask() {
   const [formData, setFormData] = useState([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [error, setError] = useState();
 
   const navigationData = location.state?.data;
 
@@ -47,6 +48,7 @@ function EditTask() {
       })
       .catch((error) => {
         console.log("error", error);
+        setError(error?.response?.data?.status);
       });
   };
 
@@ -84,6 +86,7 @@ function EditTask() {
               onChange={(field, value) => handleFormDataChange(0, field, value)}
             />
           </div>
+          {error && <p className="mt-4 text-red-600">{error}</p>}
           <div className="mt-6 flex justify-end space-x-3">
             <button
               type="button"

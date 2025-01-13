@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import TaskListHeader from './TaskListHeader';
-import TaskListTable from './TaskListTable';
-import TaskListFilters from './TaskListFilters';
+import React, { useState } from "react";
+import { Search } from "lucide-react";
+import TaskListHeader from "./TaskListHeader";
+import TaskListTable from "./TaskListTable";
+import TaskListFilters from "./TaskListFilters";
 
 function TaskList() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
-    sortBy: 'dueDate',
-    volume: 'all',
-    journal: 'all'
+    sortBy: "dueDate",
+    volume: "all",
+    journal: "all",
   });
 
   const handleFilterChange = (newFilters) => {
-    setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
+    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
   };
 
   return (
@@ -23,14 +23,17 @@ function TaskList() {
         <div className="relative w-full md:w-64 mb-4 md:mb-0">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search Author"
             className="w-full pl-10 pr-4 py-2 border rounded-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
-        <TaskListFilters filters={filters} onFilterChange={handleFilterChange} />
+        <TaskListFilters
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
       </div>
       <TaskListTable searchQuery={searchQuery} filters={filters} />
     </div>
@@ -38,4 +41,3 @@ function TaskList() {
 }
 
 export default TaskList;
-
